@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public void changePlayer(View view) {
         game.changePlayerTurn();
         setPlayerTurn();
-
+        refreshTextViewWithValue(R.id.brake_points, "Brake score: " + game.getCurrentBreak());
     }
 
     private void setPlayerTurn() {
@@ -69,9 +69,19 @@ public class MainActivity extends AppCompatActivity {
                 throw new RuntimeException("Unknow button ID");
         }
         game.increaseBreakPoints(points);
-        TextView tv = findViewById(R.id.brake_points);
-        tv.setText(game.getCurrentBreak());
+        if (game.isFirstPlayerTurn()){
+            refreshTextViewWithValue(R.id.player1_frame_points, game.getPlayer1points());
+        } else {
+            refreshTextViewWithValue(R.id.player2_frame_points, game.getPlayer2points());
+        }
+        refreshTextViewWithValue(R.id.brake_points, "Brake score: " + game.getCurrentBreak());
+        refreshTextViewWithValue(R.id.remain_points, "Remaining score: " + game.getFramePointsRamain());
 
+    }
+
+    private void refreshTextViewWithValue(int brake_points, String s) {
+        TextView tv = findViewById(brake_points);
+        tv.setText(s);
     }
 
 }
