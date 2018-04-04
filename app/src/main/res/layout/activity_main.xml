@@ -1,44 +1,255 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.widget.LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="15dp"
     android:background="#388E3C"
+    android:orientation="vertical"
+    android:padding="12dp"
     tools:context="com.udacity.maistrenko.snookerscore.MainActivity">
-
+    <!-- current turn markers -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/current_player1_marker"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/marker" />
+
+        <ImageView
+            android:id="@+id/current_player2_marker"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/marker"
+            android:visibility="invisible" />
+
     </RelativeLayout>
+    <!-- players list-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryInfoBackground"
         android:orientation="horizontal">
+
         <EditText
             android:id="@+id/playerName1"
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:textColor="@color/colorPrimaryText"
             android:gravity="center"
-            android:text="@string/player1_name" />
+            android:inputType="textPersonName"
+            android:text="@string/player1_name"
+            android:textColor="@color/colorPrimaryText" />
+
         <EditText
             android:id="@+id/playerName2"
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:textColor="@color/colorPrimaryText"
             android:gravity="center"
-            android:text="@string/player2_name" />
+            android:inputType="textPersonName"
+            android:text="@string/player2_name"
+            android:textColor="@color/colorPrimaryText" />
 
     </LinearLayout>
+    <!--Match scores -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/colorPrimaryInfoBackground"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+
+                android:text="0 (0) 0"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Remaining score: 147"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/brake_points"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Brake score: 16"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Next ball: RED"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        >
+
+        <ImageButton
+            android:id="@+id/add_yellow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:scaleType="centerInside"
+            android:onClick="addPoint"
+            app:srcCompat="@drawable/yellow" />
+
+        <ImageButton
+            android:id="@+id/add_green"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:scaleType="centerInside"
+            android:onClick="addPoint"
+            app:srcCompat="@drawable/green" />
+
+        <ImageButton
+            android:id="@+id/add_brown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:scaleType="centerInside"
+            android:onClick="addPoint"
+            app:srcCompat="@drawable/brown" />
+
+        <ImageButton
+            android:id="@+id/add_blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="12dp"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:scaleType="centerInside"
+            android:onClick="addPoint"
+            app:srcCompat="@drawable/blue" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+
+        <ImageButton
+            android:id="@+id/add_red"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:padding="12dp"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:scaleType="centerInside"
+            android:onClick="addPoint"
+            android:src="@drawable/red" />
+
+        <ImageButton
+            android:id="@+id/add_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:padding="12dp"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:scaleType="centerInside"
+            android:onClick="addPoint"
+            app:srcCompat="@drawable/black" />
+
+        <ImageButton
+            android:id="@+id/add_pink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:padding="12dp"
+            android:background="@android:color/transparent"
+            android:elevation="0dp"
+            android:scaleType="centerInside"
+            android:onClick="addPoint"
+            app:srcCompat="@drawable/pink" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Foul" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="changePlayer"
+        android:text="change turn " />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="New frame" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="New match" />
 
 </android.widget.LinearLayout>
