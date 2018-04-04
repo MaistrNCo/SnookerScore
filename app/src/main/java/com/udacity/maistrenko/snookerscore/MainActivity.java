@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private void setPlayerTurn() {
         ImageView marker1 = findViewById(R.id.current_player1_marker);
         ImageView marker2 = findViewById(R.id.current_player2_marker);
+        refreshTextViewWithValue(R.id.txt_next_ball, "Next ball: " + game.getNextBall());
         if (game.isFirstPlayerTurn()) {
             marker1.setVisibility(View.VISIBLE);
             marker2.setVisibility(View.INVISIBLE);
@@ -68,15 +69,16 @@ public class MainActivity extends AppCompatActivity {
             default:
                 throw new RuntimeException("Unknow button ID");
         }
-        game.increaseBreakPoints(points);
-        if (game.isFirstPlayerTurn()){
-            refreshTextViewWithValue(R.id.player1_frame_points, game.getPlayer1points());
-        } else {
-            refreshTextViewWithValue(R.id.player2_frame_points, game.getPlayer2points());
+        if (game.increaseBreakPoints(points)) {
+            if (game.isFirstPlayerTurn()) {
+                refreshTextViewWithValue(R.id.player1_frame_points, game.getPlayer1points());
+            } else {
+                refreshTextViewWithValue(R.id.player2_frame_points, game.getPlayer2points());
+            }
+            refreshTextViewWithValue(R.id.brake_points, "Brake score: " + game.getCurrentBreak());
+            refreshTextViewWithValue(R.id.remain_points, "Remaining score: " + game.getFramePointsRamain());
+            refreshTextViewWithValue(R.id.txt_next_ball, "Next ball: " + game.getNextBall());
         }
-        refreshTextViewWithValue(R.id.brake_points, "Brake score: " + game.getCurrentBreak());
-        refreshTextViewWithValue(R.id.remain_points, "Remaining score: " + game.getFramePointsRamain());
-
     }
 
     private void refreshTextViewWithValue(int brake_points, String s) {
