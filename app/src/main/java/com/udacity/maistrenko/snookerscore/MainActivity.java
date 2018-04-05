@@ -12,14 +12,36 @@ public class MainActivity extends AppCompatActivity {
     private Game game;
 
     MainActivity() {
-        game = new Game();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState == null ) {
+            game = new Game();
+        }else{
+            game = savedInstanceState.getParcelable("game");
+        }
         setContentView(R.layout.activity_main);
+        updatePointsOnView();
         setPlayerTurn();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelable("game",game);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+
+        game = savedInstanceState.getParcelable("game");
     }
 
     public void changePlayer(View view) {
@@ -70,15 +92,16 @@ public class MainActivity extends AppCompatActivity {
                 throw new RuntimeException("Unknow button ID");
         }
         if (game.increaseBreakPoints(points)) {
-            if (game.isFirstPlayerTurn()) {
-                refreshTextViewWithValue(R.id.player1_frame_points, game.getPlayer1points());
-            } else {
-                refreshTextViewWithValue(R.id.player2_frame_points, game.getPlayer2points());
-            }
-            refreshTextViewWithValue(R.id.brake_points, "Brake score: " + game.getCurrentBreak());
-            refreshTextViewWithValue(R.id.remain_points, "Remaining score: " + game.getFramePointsRamain());
-            refreshTextViewWithValue(R.id.txt_next_ball, "Next ball: " + game.getNextBall());
+            updatePointsOnView();
         }
+    }
+
+    private void updatePointsOnView() {
+        refreshTextViewWithValue(R.id.brake_points, "Brake score: " + game.getCurrentBreak());
+        refreshTextViewWithValue(R.id.remain_points, "Remaining score: " + game.getFramePointsRamain());
+        refreshTextViewWithValue(R.id.txt_next_ball, "Next ball: " + game.getNextBall());
+        refreshTextViewWithValue(R.id.player1_frame_points, game.getPlayer1points());
+        refreshTextViewWithValue(R.id.player2_frame_points, game.getPlayer2points());
     }
 
     private void refreshTextViewWithValue(int brake_points, String s) {

@@ -1,5 +1,8 @@
 package com.udacity.maistrenko.snookerscore;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -7,7 +10,38 @@ import java.util.List;
  * Class contains current game states and methods to change them.
  */
 
-class Game {
+class Game implements Parcelable {
+
+    public static final Creator<Game> CREATOR = new Creator<Game>() {
+        @Override
+        public Game createFromParcel(Parcel in) {
+            return new Game(in);
+        }
+
+        @Override
+        public Game[] newArray(int size) {
+            return new Game[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        int[] intParams = new int[5];
+        intParams[0] = currentBreak;
+        intParams[1] = player1points;
+        intParams[2] = player2points;
+        intParams[3] = redBallsLeft;
+        dest.writeIntArray(intParams);
+        boolean[] flag = {firstPlayerTurn};
+        dest.writeBooleanArray(flag);
+    }
+
+
     private enum Ball {
         RED, COLOR, BLACK, PINK,
         BLUE, BROWN, GREEN, YELLOW
@@ -19,7 +53,7 @@ class Game {
     private int pointsRemain = 147;
     private int player1points = 0;
     private int player2points = 0;
-    private int redBallsLeft = 5;
+    private int redBallsLeft = 15;
     List<Ball> coloredBalls;
 
     Game() {
@@ -31,6 +65,33 @@ class Game {
         coloredBalls.add(Ball.PINK);
         coloredBalls.add(Ball.BLACK);
     }
+
+    Game(Parcel parcel) {
+        coloredBalls = new LinkedList<>();
+        coloredBalls.add(Ball.YELLOW);
+        coloredBalls.add(Ball.GREEN);
+        coloredBalls.add(Ball.BROWN);
+        coloredBalls.add(Ball.BLUE);
+        coloredBalls.add(Ball.PINK);
+        coloredBalls.add(Ball.BLACK);
+
+        int[] intParams = new int[5];
+        parcel.readIntArray(intParams);
+        currentBreak = intParams[0];
+        player1points = intParams[1];
+        player2points = intParams[2];
+        redBallsLeft = intParams[3];
+
+        currentBreak = parcel.readInt();
+        player1points = parcel.readInt();
+        player2points = parcel.readInt();
+        redBallsLeft = parcel.readInt();
+
+        boolean[] flag = new boolean[1];
+        parcel.readBooleanArray(flag);
+        firstPlayerTurn = flag[0];
+    }
+
 
     boolean increaseBreakPoints(int points) {
 
