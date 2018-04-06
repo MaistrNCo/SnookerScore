@@ -12,6 +12,22 @@ import java.util.List;
 
 class Game implements Parcelable {
 
+    private enum Ball {
+        RED, COLOR, BLACK, PINK,
+        BLUE, BROWN, GREEN, YELLOW
+    }
+
+    boolean firstPlayerTurn = true;
+    private Ball nextBall = Ball.RED;
+    private int currentBreak = 0;
+    private int player1points = 0;
+    private int player2points = 0;
+    private int player1Frames = 0;
+    private int player2Frames = 0;
+    private int totalFrames = 0;
+    private int redBallsLeft = 15;
+    List<Ball> coloredBalls;
+
     public static final Creator<Game> CREATOR = new Creator<Game>() {
         @Override
         public Game createFromParcel(Parcel in) {
@@ -24,6 +40,7 @@ class Game implements Parcelable {
         }
     };
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -31,32 +48,25 @@ class Game implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        int[] intParams = new int[5];
+        int[] intParams = new int[7];
         intParams[0] = currentBreak;
         intParams[1] = player1points;
         intParams[2] = player2points;
         intParams[3] = redBallsLeft;
+        intParams[4] = player1Frames;
+        intParams[5] = player2Frames;
+        intParams[6] = totalFrames;
         dest.writeIntArray(intParams);
         boolean[] flag = {firstPlayerTurn};
         dest.writeBooleanArray(flag);
     }
 
 
-    private enum Ball {
-        RED, COLOR, BLACK, PINK,
-        BLUE, BROWN, GREEN, YELLOW
+    Game() {
+        createColoredBallsSet();
     }
 
-    boolean firstPlayerTurn = true;
-    private Ball nextBall = Ball.RED;
-    private int currentBreak = 0;
-    private int pointsRemain = 147;
-    private int player1points = 0;
-    private int player2points = 0;
-    private int redBallsLeft = 15;
-    List<Ball> coloredBalls;
-
-    Game() {
+    private void createColoredBallsSet() {
         coloredBalls = new LinkedList<>();
         coloredBalls.add(Ball.YELLOW);
         coloredBalls.add(Ball.GREEN);
@@ -67,13 +77,7 @@ class Game implements Parcelable {
     }
 
     Game(Parcel parcel) {
-        coloredBalls = new LinkedList<>();
-        coloredBalls.add(Ball.YELLOW);
-        coloredBalls.add(Ball.GREEN);
-        coloredBalls.add(Ball.BROWN);
-        coloredBalls.add(Ball.BLUE);
-        coloredBalls.add(Ball.PINK);
-        coloredBalls.add(Ball.BLACK);
+        this();
 
         int[] intParams = new int[5];
         parcel.readIntArray(intParams);
@@ -81,11 +85,9 @@ class Game implements Parcelable {
         player1points = intParams[1];
         player2points = intParams[2];
         redBallsLeft = intParams[3];
-
-        currentBreak = parcel.readInt();
-        player1points = parcel.readInt();
-        player2points = parcel.readInt();
-        redBallsLeft = parcel.readInt();
+        player1Frames = intParams[4];
+        player2Frames = intParams[5];
+        totalFrames = intParams[6];
 
         boolean[] flag = new boolean[1];
         parcel.readBooleanArray(flag);
@@ -130,10 +132,12 @@ class Game implements Parcelable {
                 nextBall = coloredBalls.get(0); // or colored by order if ran out of red
             }
         } else { //last colored sequence by order
+            coloredBalls.remove(0);   //remove potted ball from list
             if (nextBall != Ball.BLACK) {
-                coloredBalls.remove(0);   //remove potted ball from list
                 nextBall = coloredBalls.get(0); //now first in list have to be next potted
-            } //TODO implement behaviour  in the and of frame
+            } else {
+                nextBall = null;
+            }//TODO implement behaviour  in the and of frame
         }
     }
 
@@ -169,7 +173,8 @@ class Game implements Parcelable {
         firstPlayerTurn = !firstPlayerTurn;
     }
 
-    private void calculateFramePointsRemain() {
+    private int calculateFramePointsRemain() {
+        int pointsRemain;
         if (redBallsLeft > 0) {
             pointsRemain = redBallsLeft * 8 + 27;
         } else if (nextBall == Ball.COLOR) {
@@ -184,9 +189,12 @@ class Game implements Parcelable {
             pointsRemain = 18;
         } else if (nextBall == Ball.PINK) {
             pointsRemain = 13;
-        } else {
+        } else if (nextBall == Ball.BLACK) {
             pointsRemain = 7;
+        } else {
+            pointsRemain = 0;
         }
+        return pointsRemain;
 
     }
 
@@ -202,11 +210,53 @@ class Game implements Parcelable {
         return String.valueOf(player2points);
     }
 
-    String getFramePointsRamain() {
-        return String.valueOf(pointsRemain);
+    String getPlayer1Frames() {
+        return String.valueOf(player1Frames);
+    }
+    String getPlayer2Frames() {
+        return String.valueOf(player2Frames);
+    }
+
+    String getTotalFrames() {
+        return String.valueOf(totalFrames);
+    }
+
+    String getFramePointsRemain() {
+        return String.valueOf(calculateFramePointsRemain());
     }
 
     String getNextBall() {
+        if (nextBall == null) {
+            return "FRAME FINISHED";
+        }
         return nextBall.toString();
+    }
+
+    void initNewFrame() {
+        totalFrames++;
+        if (player1points > player2points) {
+            player1Frames++;
+        } else if (player1points < player2points) {
+            player2Frames++;
+        }
+        player1points = 0;
+        player2points = 0;
+        currentBreak = 0;
+        createColoredBallsSet();
+        nextBall = Ball.RED;
+        redBallsLeft = 15;
+    }
+
+    void initNewMatch() {
+        totalFrames = 0;
+        player1Frames = 0;
+        player2Frames =0;
+        player1points = 0;
+        player2points = 0;
+        currentBreak = 0;
+        createColoredBallsSet();
+        nextBall = Ball.RED;
+        redBallsLeft = 15;
+
     }
 }

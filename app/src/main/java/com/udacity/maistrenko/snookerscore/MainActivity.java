@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_main);
         updatePointsOnView();
+        updateFramesCountView();
         setPlayerTurn();
     }
 
@@ -96,12 +97,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void startNewFrame(View view) {
+        game.initNewFrame();
+        updateFramesCountView();
+        updatePointsOnView();
+    }
+
+    public void startNewMatch(View view) {
+        game.initNewMatch();
+        updateFramesCountView();
+        updatePointsOnView();
+
+    }
+
+
+
     private void updatePointsOnView() {
         refreshTextViewWithValue(R.id.brake_points, "Brake score: " + game.getCurrentBreak());
-        refreshTextViewWithValue(R.id.remain_points, "Remaining score: " + game.getFramePointsRamain());
+        refreshTextViewWithValue(R.id.remain_points, "Remaining score: " + game.getFramePointsRemain());
         refreshTextViewWithValue(R.id.txt_next_ball, "Next ball: " + game.getNextBall());
         refreshTextViewWithValue(R.id.player1_frame_points, game.getPlayer1points());
         refreshTextViewWithValue(R.id.player2_frame_points, game.getPlayer2points());
+    }
+    private void updateFramesCountView() {
+        refreshTextViewWithValue(R.id.frames_count, "" + game.getPlayer1Frames()
+                + " (" + game.getTotalFrames() + ") "
+                + game.getPlayer2Frames());
     }
 
     private void refreshTextViewWithValue(int brake_points, String s) {
