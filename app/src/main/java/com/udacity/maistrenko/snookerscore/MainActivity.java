@@ -17,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState == null ) {
+        if (savedInstanceState == null) {
             game = new Game();
-        }else{
+        } else {
             game = savedInstanceState.getParcelable("game");
         }
         setContentView(R.layout.activity_main);
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putParcelable("game",game);
+        savedInstanceState.putParcelable("game", game);
     }
 
     @Override
@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void updatePointsOnView() {
         refreshTextViewWithValue(R.id.brake_points, "Brake score: " + game.getCurrentBreak());
         refreshTextViewWithValue(R.id.remain_points, "Remaining score: " + game.getFramePointsRemain());
@@ -119,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         refreshTextViewWithValue(R.id.player1_frame_points, game.getPlayer1points());
         refreshTextViewWithValue(R.id.player2_frame_points, game.getPlayer2points());
     }
+
     private void updateFramesCountView() {
         refreshTextViewWithValue(R.id.frames_count, "" + game.getPlayer1Frames()
                 + " (" + game.getTotalFrames() + ") "

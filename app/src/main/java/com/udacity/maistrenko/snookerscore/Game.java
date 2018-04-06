@@ -213,6 +213,7 @@ class Game implements Parcelable {
     String getPlayer1Frames() {
         return String.valueOf(player1Frames);
     }
+
     String getPlayer2Frames() {
         return String.valueOf(player2Frames);
     }
@@ -250,7 +251,7 @@ class Game implements Parcelable {
     void initNewMatch() {
         totalFrames = 0;
         player1Frames = 0;
-        player2Frames =0;
+        player2Frames = 0;
         player1points = 0;
         player2points = 0;
         currentBreak = 0;
